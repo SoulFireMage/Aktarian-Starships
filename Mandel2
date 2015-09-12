@@ -1,0 +1,60 @@
+shader mandelbrot_fractal_zn_zoom(
+    float Scale = 1.0,
+    float Zoom = 3.5,
+    vector Vector = (vector)P,    
+    float CenterX = 0.0,
+    float CenterY = 0.0,
+    int MaxIterations = 64,
+    int Exponent = 2,
+    float Bailout = 2.0,
+    output float Fac = 0.0)
+{
+    point p = (point)Vector*Scale/(2*Zoom);
+    int i = 0;
+    int j = 0;
+    int prevIteration = MaxIterations;
+    float factor = 0.0;
+    float foo = 0.0;
+   
+    // Starting point
+    p[0] += CenterX;
+    p[1] += CenterY;
+  
+    // Initialize 
+    point pa = point(0.0);
+    point pb = point(0.0);
+    point pc = point(0.0);
+     
+    // Mandelbrot algorithm
+    do
+    {
+        // z^j
+        for(j = 1; j < Exponent; j++) {
+            pc[0] = pa[0] * pb[0] - pa[1] * pb[1];
+            pc[1] = pa[0] * pb[1] + pa[1] * pb[0];
+ 
+            // for next product
+            pb[0] = pc[0];
+            pb[1] = pc[1];
+        }
+ 
+        // z^exponent + c
+        pa = pc + p;
+        pb[0] = pa[0];
+        pb[1] = pa[1];
+        
+        i++;
+ 
+        if ((prevIteration == MaxIterations) && (sqrt((pa[0]*pa[0]) + (pa[1]*pa[1])) > Bailout)) {
+            prevIteration = i + 1;
+        }        
+    } while (i < prevIteration);
+  
+    // Factor to colorize
+    factor = float(i);
+    foo = sqrt((pa[0]*pa[0]) + (pa[1]*pa[1]));
+    factor = factor - (log(log(foo))/log(Bailout));
+    factor = factor / float(MaxIterations); 
+   
+    Fac = factor;
+}

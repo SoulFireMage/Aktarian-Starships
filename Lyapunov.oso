@@ -1,0 +1,631 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.5.11
+shader node_lyapunov
+param	color	Pos_Color	1 0 0 		 %read{237,237} %write{2147483647,-1}
+param	color	Mid_Color	0 0 0 		 %read{237,254} %write{2147483647,-1}
+param	color	Neg_Color	0 0 1 		 %read{251,251} %write{2147483647,-1}
+param	float	Pre_Iteration	0 		 %read{6,11} %write{2147483647,-1}
+param	float	Main_Iteration	1 		 %read{8,13} %write{2147483647,-1}
+param	float	Pos_Scale	0.5 		 %read{233,233} %write{2147483647,-1}
+param	float	Neg_Scale	0.5 		 %read{247,247} %write{2147483647,-1}
+param	float	Param1	2 		 %read{23,201} %write{2147483647,-1}
+param	float	Param2	2 		 %read{27,200} %write{2147483647,-1}
+param	int	Fac_Type	0 		 %read{255,262} %write{2147483647,-1}
+param	int	Render_Type	2 		 %read{229,243} %write{2147483647,-1}
+param	float	Scale	0.25 		 %read{1,1} %write{2147483647,-1}
+param	point	Pos	0 0 0 		 %read{1,1} %write{0,0}
+oparam	float	Fac	0 		 %read{2147483647,-1} %write{271,271}
+oparam	color	Color	0 0 0 		 %read{264,267} %write{239,254}
+global	point	P	 %read{0,0} %write{2147483647,-1}
+local	float	___320_a	 %read{21,163} %write{3,3}
+local	float	___320_b	 %read{28,184} %write{4,4}
+local	float	___320_c	 %read{35,205} %write{5,5}
+local	int	___320_iter_pre	 %read{10,20} %write{7,7}
+local	int	___320_iter_main	 %read{12,74} %write{9,9}
+local	float	___320_nabla_pre	 %read{44,69} %write{11,11}
+local	float	___320_nabla_main	 %read{140,221} %write{13,13}
+local	float	___320_x	 %read{18,205} %write{14,200}
+local	float	___320_index	 %read{18,224} %write{15,223}
+local	float	___320_derivation	 %read{18,210} %write{16,207}
+local	int	___320_iter	 %read{18,217} %write{17,214}
+local	int	___321_i	 %read{18,43} %write{18,43}
+local	float	___323_x_pre	 %read{70,70} %write{46,46}
+local	int	___324_i	 %read{72,139} %write{72,139}
+local	float	___330_index_pre	 %read{222,222} %write{150,151}
+local	float	index	 %read{226,271} %write{224,270}
+temp	point	$tmp1	 %read{3,5} %write{1,1}
+const	string	$const1	"lyapunov"		 %read{2,2} %write{2147483647,-1}
+const	int	$const2	0		 %read{3,264} %write{2147483647,-1}
+const	int	$const3	1		 %read{4,265} %write{2147483647,-1}
+const	int	$const4	2		 %read{5,267} %write{2147483647,-1}
+temp	float	$tmp2	 %read{7,7} %write{6,6}
+temp	float	$tmp3	 %read{9,9} %write{8,8}
+temp	float	$tmp4	 %read{11,11} %write{10,10}
+temp	float	$tmp5	 %read{13,13} %write{12,12}
+const	float	$const5	0		 %read{14,240} %write{2147483647,-1}
+temp	int	$tmp6	 %read{18,43} %write{18,43}
+temp	float	$tmp7	 %read{23,23} %write{22,22}
+temp	float	$tmp8	 %read{22,22} %write{21,21}
+temp	float	$tmp9	 %read{26,26} %write{23,23}
+temp	float	$tmp10	 %read{26,26} %write{25,25}
+temp	float	$tmp11	 %read{25,25} %write{24,24}
+temp	float	$tmp12	 %read{27,27} %write{26,26}
+temp	float	$tmp13	 %read{30,30} %write{29,29}
+temp	float	$tmp14	 %read{29,29} %write{28,28}
+temp	float	$tmp15	 %read{33,33} %write{30,30}
+temp	float	$tmp16	 %read{33,33} %write{32,32}
+temp	float	$tmp17	 %read{32,32} %write{31,31}
+temp	float	$tmp18	 %read{34,34} %write{33,33}
+temp	float	$tmp19	 %read{37,37} %write{36,36}
+temp	float	$tmp20	 %read{36,36} %write{35,35}
+temp	float	$tmp21	 %read{40,40} %write{37,37}
+temp	float	$tmp22	 %read{40,40} %write{39,39}
+temp	float	$tmp23	 %read{39,39} %write{38,38}
+temp	float	$tmp24	 %read{41,41} %write{40,40}
+temp	int	$tmp25	 %read{2147483647,-1} %write{42,42}
+temp	int	$tmp26	 %read{45,45} %write{44,44}
+temp	float	$tmp27	 %read{49,49} %write{48,48}
+temp	float	$tmp28	 %read{48,48} %write{47,47}
+temp	float	$tmp29	 %read{52,52} %write{49,49}
+temp	float	$tmp30	 %read{52,52} %write{51,51}
+temp	float	$tmp31	 %read{51,51} %write{50,50}
+temp	float	$tmp32	 %read{53,53} %write{52,52}
+temp	float	$tmp33	 %read{56,56} %write{55,55}
+temp	float	$tmp34	 %read{55,55} %write{54,54}
+temp	float	$tmp35	 %read{59,59} %write{56,56}
+temp	float	$tmp36	 %read{59,59} %write{58,58}
+temp	float	$tmp37	 %read{58,58} %write{57,57}
+temp	float	$tmp38	 %read{60,60} %write{59,59}
+temp	float	$tmp39	 %read{63,63} %write{62,62}
+temp	float	$tmp40	 %read{62,62} %write{61,61}
+temp	float	$tmp41	 %read{66,66} %write{63,63}
+temp	float	$tmp42	 %read{66,66} %write{65,65}
+temp	float	$tmp43	 %read{65,65} %write{64,64}
+temp	float	$tmp44	 %read{67,67} %write{66,66}
+temp	float	$tmp45	 %read{71,71} %write{68,68}
+const	float	$const6	1		 %read{69,269} %write{2147483647,-1}
+temp	float	$tmp46	 %read{70,70} %write{69,69}
+temp	float	$tmp47	 %read{71,71} %write{70,70}
+temp	int	$tmp48	 %read{72,139} %write{72,139}
+temp	float	$tmp49	 %read{77,77} %write{76,76}
+temp	float	$tmp50	 %read{76,76} %write{75,75}
+temp	float	$tmp51	 %read{80,80} %write{77,77}
+temp	float	$tmp52	 %read{80,80} %write{79,79}
+temp	float	$tmp53	 %read{79,79} %write{78,78}
+temp	float	$tmp54	 %read{81,81} %write{80,80}
+const	float	$const7	2		 %read{82,201} %write{2147483647,-1}
+temp	float	$tmp55	 %read{85,85} %write{82,82}
+temp	float	$tmp56	 %read{85,85} %write{84,84}
+temp	float	$tmp57	 %read{84,84} %write{83,83}
+temp	float	$tmp58	 %read{88,88} %write{85,85}
+temp	float	$tmp59	 %read{88,88} %write{87,87}
+temp	float	$tmp60	 %read{87,87} %write{86,86}
+temp	int	$tmp61	 %read{90,90} %write{89,89}
+temp	float	$tmp62	 %read{93,93} %write{92,92}
+temp	float	$tmp63	 %read{92,92} %write{91,91}
+temp	int	$tmp64	 %read{2147483647,-1} %write{94,94}
+temp	float	$tmp65	 %read{98,98} %write{97,97}
+temp	float	$tmp66	 %read{97,97} %write{96,96}
+temp	float	$tmp67	 %read{101,101} %write{98,98}
+temp	float	$tmp68	 %read{101,101} %write{100,100}
+temp	float	$tmp69	 %read{100,100} %write{99,99}
+temp	float	$tmp70	 %read{102,102} %write{101,101}
+temp	float	$tmp71	 %read{106,106} %write{103,103}
+temp	float	$tmp72	 %read{106,106} %write{105,105}
+temp	float	$tmp73	 %read{105,105} %write{104,104}
+temp	float	$tmp74	 %read{109,109} %write{106,106}
+temp	float	$tmp75	 %read{109,109} %write{108,108}
+temp	float	$tmp76	 %read{108,108} %write{107,107}
+temp	int	$tmp77	 %read{111,111} %write{110,110}
+temp	float	$tmp78	 %read{114,114} %write{113,113}
+temp	float	$tmp79	 %read{113,113} %write{112,112}
+temp	int	$tmp80	 %read{2147483647,-1} %write{115,115}
+temp	float	$tmp81	 %read{119,119} %write{118,118}
+temp	float	$tmp82	 %read{118,118} %write{117,117}
+temp	float	$tmp83	 %read{122,122} %write{119,119}
+temp	float	$tmp84	 %read{122,122} %write{121,121}
+temp	float	$tmp85	 %read{121,121} %write{120,120}
+temp	float	$tmp86	 %read{123,123} %write{122,122}
+temp	float	$tmp87	 %read{127,127} %write{124,124}
+temp	float	$tmp88	 %read{127,127} %write{126,126}
+temp	float	$tmp89	 %read{126,126} %write{125,125}
+temp	float	$tmp90	 %read{130,130} %write{127,127}
+temp	float	$tmp91	 %read{130,130} %write{129,129}
+temp	float	$tmp92	 %read{129,129} %write{128,128}
+temp	int	$tmp93	 %read{132,132} %write{131,131}
+temp	float	$tmp94	 %read{135,135} %write{134,134}
+temp	float	$tmp95	 %read{134,134} %write{133,133}
+temp	int	$tmp96	 %read{2147483647,-1} %write{136,136}
+temp	int	$tmp97	 %read{2147483647,-1} %write{138,138}
+temp	int	$tmp98	 %read{141,141} %write{140,140}
+temp	int	$tmp99	 %read{143,143} %write{142,142}
+temp	float	$tmp100	 %read{145,145} %write{144,144}
+temp	int	$tmp101	 %read{148,148} %write{147,147}
+temp	float	$tmp102	 %read{150,150} %write{149,149}
+temp	float	$tmp103	 %read{154,154} %write{153,153}
+temp	float	$tmp104	 %read{153,153} %write{152,152}
+temp	float	$tmp105	 %read{157,157} %write{154,154}
+temp	float	$tmp106	 %read{157,157} %write{156,156}
+temp	float	$tmp107	 %read{156,156} %write{155,155}
+temp	float	$tmp108	 %read{158,158} %write{157,157}
+temp	float	$tmp109	 %read{162,162} %write{159,159}
+temp	float	$tmp110	 %read{162,162} %write{161,161}
+temp	float	$tmp111	 %read{161,161} %write{160,160}
+temp	float	$tmp112	 %read{165,165} %write{162,162}
+temp	float	$tmp113	 %read{165,165} %write{164,164}
+temp	float	$tmp114	 %read{164,164} %write{163,163}
+temp	int	$tmp115	 %read{167,167} %write{166,166}
+temp	float	$tmp116	 %read{170,170} %write{169,169}
+temp	float	$tmp117	 %read{169,169} %write{168,168}
+temp	int	$tmp118	 %read{2147483647,-1} %write{171,171}
+temp	float	$tmp119	 %read{175,175} %write{174,174}
+temp	float	$tmp120	 %read{174,174} %write{173,173}
+temp	float	$tmp121	 %read{178,178} %write{175,175}
+temp	float	$tmp122	 %read{178,178} %write{177,177}
+temp	float	$tmp123	 %read{177,177} %write{176,176}
+temp	float	$tmp124	 %read{179,179} %write{178,178}
+temp	float	$tmp125	 %read{183,183} %write{180,180}
+temp	float	$tmp126	 %read{183,183} %write{182,182}
+temp	float	$tmp127	 %read{182,182} %write{181,181}
+temp	float	$tmp128	 %read{186,186} %write{183,183}
+temp	float	$tmp129	 %read{186,186} %write{185,185}
+temp	float	$tmp130	 %read{185,185} %write{184,184}
+temp	int	$tmp131	 %read{188,188} %write{187,187}
+temp	float	$tmp132	 %read{191,191} %write{190,190}
+temp	float	$tmp133	 %read{190,190} %write{189,189}
+temp	int	$tmp134	 %read{2147483647,-1} %write{192,192}
+temp	float	$tmp135	 %read{196,196} %write{195,195}
+temp	float	$tmp136	 %read{195,195} %write{194,194}
+temp	float	$tmp137	 %read{199,199} %write{196,196}
+temp	float	$tmp138	 %read{199,199} %write{198,198}
+temp	float	$tmp139	 %read{198,198} %write{197,197}
+temp	float	$tmp140	 %read{200,200} %write{199,199}
+temp	float	$tmp141	 %read{204,204} %write{201,201}
+temp	float	$tmp142	 %read{204,204} %write{203,203}
+temp	float	$tmp143	 %read{203,203} %write{202,202}
+temp	float	$tmp144	 %read{207,207} %write{204,204}
+temp	float	$tmp145	 %read{207,207} %write{206,206}
+temp	float	$tmp146	 %read{206,206} %write{205,205}
+temp	int	$tmp147	 %read{209,209} %write{208,208}
+temp	float	$tmp148	 %read{212,212} %write{211,211}
+temp	float	$tmp149	 %read{211,211} %write{210,210}
+temp	int	$tmp150	 %read{2147483647,-1} %write{213,213}
+temp	int	$tmp151	 %read{216,216} %write{215,215}
+temp	float	$tmp152	 %read{218,218} %write{217,217}
+temp	float	$tmp153	 %read{223,223} %write{220,220}
+temp	float	$tmp154	 %read{222,222} %write{221,221}
+temp	float	$tmp155	 %read{223,223} %write{222,222}
+temp	int	$tmp156	 %read{227,227} %write{226,226}
+temp	int	$tmp157	 %read{228,232} %write{227,231}
+temp	int	$tmp158	 %read{230,230} %write{229,229}
+temp	int	$tmp159	 %read{231,231} %write{230,230}
+temp	int	$tmp160	 %read{235,235} %write{234,234}
+temp	color	$tmp161	 %read{238,238} %write{237,237}
+temp	color	$tmp162	 %read{239,239} %write{238,238}
+temp	int	$tmp163	 %read{241,241} %write{240,240}
+temp	int	$tmp164	 %read{242,246} %write{241,245}
+temp	int	$tmp165	 %read{244,244} %write{243,243}
+temp	int	$tmp166	 %read{245,245} %write{244,244}
+const	float	$const8	-1		 %read{248,250} %write{2147483647,-1}
+temp	int	$tmp167	 %read{249,249} %write{248,248}
+temp	color	$tmp168	 %read{252,252} %write{251,251}
+temp	color	$tmp169	 %read{253,253} %write{252,252}
+temp	int	$tmp170	 %read{256,256} %write{255,255}
+const	float	$const9	0.5		 %read{257,258} %write{2147483647,-1}
+temp	float	$tmp171	 %read{258,258} %write{257,257}
+temp	int	$tmp172	 %read{260,260} %write{259,259}
+temp	int	$tmp173	 %read{263,263} %write{262,262}
+temp	float	$tmp174	 %read{266,266} %write{264,264}
+temp	float	$tmp175	 %read{266,266} %write{265,265}
+temp	float	$tmp176	 %read{268,268} %write{266,266}
+temp	float	$tmp177	 %read{268,268} %write{267,267}
+temp	float	$tmp178	 %read{270,270} %write{268,268}
+const	float	$const10	3		 %read{269,269} %write{2147483647,-1}
+temp	float	$tmp179	 %read{270,270} %write{269,269}
+code Pos
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:87
+#  output float Fac = 0.0,
+	assign		Pos P 	%filename{"C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl"} %line{87} %argrw{"wr"}
+code ___main___
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:92
+#  
+	mul		$tmp1 Pos Scale 	%filename{"C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl"} %line{92} %argrw{"wrr"}
+	functioncall	$const1 226 	%argrw{"r"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:5
+#  float b = p[1];
+	compref		___320_a $tmp1 $const2 	%line{5} %argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:6
+#  float c = p[2];
+	compref		___320_b $tmp1 $const3 	%line{6} %argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:7
+#  
+	compref		___320_c $tmp1 $const4 	%line{7} %argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:9
+#  int iter_main = (int)floor(iteration_main);
+	floor		$tmp2 Pre_Iteration 	%line{9} %argrw{"wr"}
+	assign		___320_iter_pre $tmp2 	%argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:10
+#  float nabla_pre = iteration_pre - (float)iter_pre;
+	floor		$tmp3 Main_Iteration 	%line{10} %argrw{"wr"}
+	assign		___320_iter_main $tmp3 	%argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:11
+#  float nabla_main = iteration_main - (float)iter_main;
+	assign		$tmp4 ___320_iter_pre 	%line{11} %argrw{"wr"}
+	sub		___320_nabla_pre Pre_Iteration $tmp4 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:12
+#  
+	assign		$tmp5 ___320_iter_main 	%line{12} %argrw{"wr"}
+	sub		___320_nabla_main Main_Iteration $tmp5 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:14
+#  float index = 0.0;
+	assign		___320_x $const5 	%line{14} %argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:15
+#  float derivation = 0.0;
+	assign		___320_index $const5 	%line{15} %argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:16
+#  int iter = 0;
+	assign		___320_derivation $const5 	%line{16} %argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:17
+#  
+	assign		___320_iter $const2 	%line{17} %argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:20
+#  	x = p1*sin(x+a) * sin(x+a)+p2;
+	for		$tmp6 20 21 42 44 	%line{20} %argrw{"r"}
+	assign		___321_i $const2 	%argrw{"wr"}
+	lt		$tmp6 ___321_i ___320_iter_pre 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:21
+#  	x = p1*sin(x+b) * sin(x+b)+p2;
+	add		$tmp8 ___320_x ___320_a 	%line{21} %argrw{"wrr"}
+	sin		$tmp7 $tmp8 	%argrw{"wr"}
+	mul		$tmp9 Param1 $tmp7 	%argrw{"wrr"}
+	add		$tmp11 ___320_x ___320_a 	%argrw{"wrr"}
+	sin		$tmp10 $tmp11 	%argrw{"wr"}
+	mul		$tmp12 $tmp9 $tmp10 	%argrw{"wrr"}
+	add		___320_x $tmp12 Param2 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:22
+#  	x = p1*sin(x+c) * sin(x+c)+p2;
+	add		$tmp14 ___320_x ___320_b 	%line{22} %argrw{"wrr"}
+	sin		$tmp13 $tmp14 	%argrw{"wr"}
+	mul		$tmp15 Param1 $tmp13 	%argrw{"wrr"}
+	add		$tmp17 ___320_x ___320_b 	%argrw{"wrr"}
+	sin		$tmp16 $tmp17 	%argrw{"wr"}
+	mul		$tmp18 $tmp15 $tmp16 	%argrw{"wrr"}
+	add		___320_x $tmp18 Param2 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:23
+#  }
+	add		$tmp20 ___320_x ___320_c 	%line{23} %argrw{"wrr"}
+	sin		$tmp19 $tmp20 	%argrw{"wr"}
+	mul		$tmp21 Param1 $tmp19 	%argrw{"wrr"}
+	add		$tmp23 ___320_x ___320_c 	%argrw{"wrr"}
+	sin		$tmp22 $tmp23 	%argrw{"wr"}
+	mul		$tmp24 $tmp21 $tmp22 	%argrw{"wrr"}
+	add		___320_x $tmp24 Param2 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:20
+#  	x = p1*sin(x+a) * sin(x+a)+p2;
+	assign		$tmp25 ___321_i 	%line{20} %argrw{"wr"}
+	add		___321_i ___321_i $const3 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:26
+#  	float x_pre = x;
+	neq		$tmp26 ___320_nabla_pre $const5 	%line{26} %argrw{"wrr"}
+	if		$tmp26 72 72 	%argrw{"r"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:27
+#  
+	assign		___323_x_pre ___320_x 	%line{27} %argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:29
+#  	x = p1*sin(x+b)*sin(x+b)+p2;
+	add		$tmp28 ___320_x ___320_a 	%line{29} %argrw{"wrr"}
+	sin		$tmp27 $tmp28 	%argrw{"wr"}
+	mul		$tmp29 Param1 $tmp27 	%argrw{"wrr"}
+	add		$tmp31 ___320_x ___320_a 	%argrw{"wrr"}
+	sin		$tmp30 $tmp31 	%argrw{"wr"}
+	mul		$tmp32 $tmp29 $tmp30 	%argrw{"wrr"}
+	add		___320_x $tmp32 Param2 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:30
+#  	x = p1*sin(x+c)*sin(x+c)+p2;
+	add		$tmp34 ___320_x ___320_b 	%line{30} %argrw{"wrr"}
+	sin		$tmp33 $tmp34 	%argrw{"wr"}
+	mul		$tmp35 Param1 $tmp33 	%argrw{"wrr"}
+	add		$tmp37 ___320_x ___320_b 	%argrw{"wrr"}
+	sin		$tmp36 $tmp37 	%argrw{"wr"}
+	mul		$tmp38 $tmp35 $tmp36 	%argrw{"wrr"}
+	add		___320_x $tmp38 Param2 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:31
+#  	x = x*nabla_pre + x_pre*(1.0-nabla_pre);
+	add		$tmp40 ___320_x ___320_c 	%line{31} %argrw{"wrr"}
+	sin		$tmp39 $tmp40 	%argrw{"wr"}
+	mul		$tmp41 Param1 $tmp39 	%argrw{"wrr"}
+	add		$tmp43 ___320_x ___320_c 	%argrw{"wrr"}
+	sin		$tmp42 $tmp43 	%argrw{"wr"}
+	mul		$tmp44 $tmp41 $tmp42 	%argrw{"wrr"}
+	add		___320_x $tmp44 Param2 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:32
+#  }
+	mul		$tmp45 ___320_x ___320_nabla_pre 	%line{32} %argrw{"wrr"}
+	sub		$tmp46 $const6 ___320_nabla_pre 	%argrw{"wrr"}
+	mul		$tmp47 ___323_x_pre $tmp46 	%argrw{"wrr"}
+	add		___320_x $tmp45 $tmp47 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:36
+#  	x = p1*sin(x+a)*sin(x+a)+p2;
+	for		$tmp48 74 75 138 140 	%line{36} %argrw{"r"}
+	assign		___324_i $const2 	%argrw{"wr"}
+	lt		$tmp48 ___324_i ___320_iter_main 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:37
+#  	derivation = 2.0*p1*sin(x+a)*cos(x+a);
+	add		$tmp50 ___320_x ___320_a 	%line{37} %argrw{"wrr"}
+	sin		$tmp49 $tmp50 	%argrw{"wr"}
+	mul		$tmp51 Param1 $tmp49 	%argrw{"wrr"}
+	add		$tmp53 ___320_x ___320_a 	%argrw{"wrr"}
+	sin		$tmp52 $tmp53 	%argrw{"wr"}
+	mul		$tmp54 $tmp51 $tmp52 	%argrw{"wrr"}
+	add		___320_x $tmp54 Param2 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:38
+#  	if (derivation != 0.0) { index += log(fabs(derivation)); iter++; }
+	mul		$tmp55 $const7 Param1 	%line{38} %argrw{"wrr"}
+	add		$tmp57 ___320_x ___320_a 	%argrw{"wrr"}
+	sin		$tmp56 $tmp57 	%argrw{"wr"}
+	mul		$tmp58 $tmp55 $tmp56 	%argrw{"wrr"}
+	add		$tmp60 ___320_x ___320_a 	%argrw{"wrr"}
+	cos		$tmp59 $tmp60 	%argrw{"wr"}
+	mul		___320_derivation $tmp58 $tmp59 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:39
+#  
+	neq		$tmp61 ___320_derivation $const5 	%line{39} %argrw{"wrr"}
+	if		$tmp61 96 96 	%argrw{"r"}
+	fabs		$tmp63 ___320_derivation 	%argrw{"wr"}
+	log		$tmp62 $tmp63 	%argrw{"wr"}
+	add		___320_index ___320_index $tmp62 	%argrw{"wrr"}
+	assign		$tmp64 ___320_iter 	%argrw{"wr"}
+	add		___320_iter ___320_iter $const3 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:41
+#  	derivation = 2.0*p1*sin(x+b)*cos(x+b);
+	add		$tmp66 ___320_x ___320_b 	%line{41} %argrw{"wrr"}
+	sin		$tmp65 $tmp66 	%argrw{"wr"}
+	mul		$tmp67 Param1 $tmp65 	%argrw{"wrr"}
+	add		$tmp69 ___320_x ___320_b 	%argrw{"wrr"}
+	sin		$tmp68 $tmp69 	%argrw{"wr"}
+	mul		$tmp70 $tmp67 $tmp68 	%argrw{"wrr"}
+	add		___320_x $tmp70 Param2 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:42
+#  	if (derivation != 0.0) { index += log(fabs(derivation)); iter++; }
+	mul		$tmp71 $const7 Param1 	%line{42} %argrw{"wrr"}
+	add		$tmp73 ___320_x ___320_b 	%argrw{"wrr"}
+	sin		$tmp72 $tmp73 	%argrw{"wr"}
+	mul		$tmp74 $tmp71 $tmp72 	%argrw{"wrr"}
+	add		$tmp76 ___320_x ___320_b 	%argrw{"wrr"}
+	cos		$tmp75 $tmp76 	%argrw{"wr"}
+	mul		___320_derivation $tmp74 $tmp75 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:43
+#  
+	neq		$tmp77 ___320_derivation $const5 	%line{43} %argrw{"wrr"}
+	if		$tmp77 117 117 	%argrw{"r"}
+	fabs		$tmp79 ___320_derivation 	%argrw{"wr"}
+	log		$tmp78 $tmp79 	%argrw{"wr"}
+	add		___320_index ___320_index $tmp78 	%argrw{"wrr"}
+	assign		$tmp80 ___320_iter 	%argrw{"wr"}
+	add		___320_iter ___320_iter $const3 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:45
+#  	derivation = 2.0*p1*sin(x+c)*cos(x+c);
+	add		$tmp82 ___320_x ___320_c 	%line{45} %argrw{"wrr"}
+	sin		$tmp81 $tmp82 	%argrw{"wr"}
+	mul		$tmp83 Param1 $tmp81 	%argrw{"wrr"}
+	add		$tmp85 ___320_x ___320_c 	%argrw{"wrr"}
+	sin		$tmp84 $tmp85 	%argrw{"wr"}
+	mul		$tmp86 $tmp83 $tmp84 	%argrw{"wrr"}
+	add		___320_x $tmp86 Param2 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:46
+#  	if (derivation != 0.0) { index += log(fabs(derivation)); iter++; }
+	mul		$tmp87 $const7 Param1 	%line{46} %argrw{"wrr"}
+	add		$tmp89 ___320_x ___320_c 	%argrw{"wrr"}
+	sin		$tmp88 $tmp89 	%argrw{"wr"}
+	mul		$tmp90 $tmp87 $tmp88 	%argrw{"wrr"}
+	add		$tmp92 ___320_x ___320_c 	%argrw{"wrr"}
+	cos		$tmp91 $tmp92 	%argrw{"wr"}
+	mul		___320_derivation $tmp90 $tmp91 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:47
+#  }
+	neq		$tmp93 ___320_derivation $const5 	%line{47} %argrw{"wrr"}
+	if		$tmp93 138 138 	%argrw{"r"}
+	fabs		$tmp95 ___320_derivation 	%argrw{"wr"}
+	log		$tmp94 $tmp95 	%argrw{"wr"}
+	add		___320_index ___320_index $tmp94 	%argrw{"wrr"}
+	assign		$tmp96 ___320_iter 	%argrw{"wr"}
+	add		___320_iter ___320_iter $const3 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:36
+#  	x = p1*sin(x+a)*sin(x+a)+p2;
+	assign		$tmp97 ___324_i 	%line{36} %argrw{"wr"}
+	add		___324_i ___324_i $const3 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:50
+#  	index = (iter != 0) ? index/(float)(iter) : 0.0;
+	eq		$tmp98 ___320_nabla_main $const5 	%line{50} %argrw{"wrr"}
+	if		$tmp98 147 224 	%argrw{"r"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:51
+#  }
+	neq		$tmp99 ___320_iter $const2 	%line{51} %argrw{"wrr"}
+	if		$tmp99 146 147 	%argrw{"r"}
+	assign		$tmp100 ___320_iter 	%argrw{"wr"}
+	div		___320_index ___320_index $tmp100 	%argrw{"wrr"}
+	assign		___320_index $const5 	%argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:54
+#  
+	neq		$tmp101 ___320_iter $const2 	%line{54} %argrw{"wrr"}
+	if		$tmp101 151 152 	%argrw{"r"}
+	assign		$tmp102 ___320_iter 	%argrw{"wr"}
+	div		___330_index_pre ___320_index $tmp102 	%argrw{"wrr"}
+	assign		___330_index_pre $const5 	%argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:56
+#  	derivation = 2.0*p1*sin(x+a)*cos(x+a);
+	add		$tmp104 ___320_x ___320_a 	%line{56} %argrw{"wrr"}
+	sin		$tmp103 $tmp104 	%argrw{"wr"}
+	mul		$tmp105 Param1 $tmp103 	%argrw{"wrr"}
+	add		$tmp107 ___320_x ___320_a 	%argrw{"wrr"}
+	sin		$tmp106 $tmp107 	%argrw{"wr"}
+	mul		$tmp108 $tmp105 $tmp106 	%argrw{"wrr"}
+	add		___320_x $tmp108 Param2 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:57
+#  	if (derivation != 0.0) { index += log(fabs(derivation)); iter++; }
+	mul		$tmp109 $const7 Param1 	%line{57} %argrw{"wrr"}
+	add		$tmp111 ___320_x ___320_a 	%argrw{"wrr"}
+	sin		$tmp110 $tmp111 	%argrw{"wr"}
+	mul		$tmp112 $tmp109 $tmp110 	%argrw{"wrr"}
+	add		$tmp114 ___320_x ___320_a 	%argrw{"wrr"}
+	cos		$tmp113 $tmp114 	%argrw{"wr"}
+	mul		___320_derivation $tmp112 $tmp113 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:58
+#  
+	neq		$tmp115 ___320_derivation $const5 	%line{58} %argrw{"wrr"}
+	if		$tmp115 173 173 	%argrw{"r"}
+	fabs		$tmp117 ___320_derivation 	%argrw{"wr"}
+	log		$tmp116 $tmp117 	%argrw{"wr"}
+	add		___320_index ___320_index $tmp116 	%argrw{"wrr"}
+	assign		$tmp118 ___320_iter 	%argrw{"wr"}
+	add		___320_iter ___320_iter $const3 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:60
+#  	derivation = 2.0*p1*sin(x+b)*cos(x+b);
+	add		$tmp120 ___320_x ___320_b 	%line{60} %argrw{"wrr"}
+	sin		$tmp119 $tmp120 	%argrw{"wr"}
+	mul		$tmp121 Param1 $tmp119 	%argrw{"wrr"}
+	add		$tmp123 ___320_x ___320_b 	%argrw{"wrr"}
+	sin		$tmp122 $tmp123 	%argrw{"wr"}
+	mul		$tmp124 $tmp121 $tmp122 	%argrw{"wrr"}
+	add		___320_x $tmp124 Param2 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:61
+#  	if (derivation != 0.0) { index += log(fabs(derivation)); iter++; }
+	mul		$tmp125 $const7 Param1 	%line{61} %argrw{"wrr"}
+	add		$tmp127 ___320_x ___320_b 	%argrw{"wrr"}
+	sin		$tmp126 $tmp127 	%argrw{"wr"}
+	mul		$tmp128 $tmp125 $tmp126 	%argrw{"wrr"}
+	add		$tmp130 ___320_x ___320_b 	%argrw{"wrr"}
+	cos		$tmp129 $tmp130 	%argrw{"wr"}
+	mul		___320_derivation $tmp128 $tmp129 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:62
+#  
+	neq		$tmp131 ___320_derivation $const5 	%line{62} %argrw{"wrr"}
+	if		$tmp131 194 194 	%argrw{"r"}
+	fabs		$tmp133 ___320_derivation 	%argrw{"wr"}
+	log		$tmp132 $tmp133 	%argrw{"wr"}
+	add		___320_index ___320_index $tmp132 	%argrw{"wrr"}
+	assign		$tmp134 ___320_iter 	%argrw{"wr"}
+	add		___320_iter ___320_iter $const3 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:64
+#  	derivation = 2.0*p1*sin(x+c)*cos(x+c);
+	add		$tmp136 ___320_x ___320_c 	%line{64} %argrw{"wrr"}
+	sin		$tmp135 $tmp136 	%argrw{"wr"}
+	mul		$tmp137 Param1 $tmp135 	%argrw{"wrr"}
+	add		$tmp139 ___320_x ___320_c 	%argrw{"wrr"}
+	sin		$tmp138 $tmp139 	%argrw{"wr"}
+	mul		$tmp140 $tmp137 $tmp138 	%argrw{"wrr"}
+	add		___320_x $tmp140 Param2 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:65
+#  	if (derivation != 0.0) { index += log(fabs(derivation)); iter++; }
+	mul		$tmp141 $const7 Param1 	%line{65} %argrw{"wrr"}
+	add		$tmp143 ___320_x ___320_c 	%argrw{"wrr"}
+	sin		$tmp142 $tmp143 	%argrw{"wr"}
+	mul		$tmp144 $tmp141 $tmp142 	%argrw{"wrr"}
+	add		$tmp146 ___320_x ___320_c 	%argrw{"wrr"}
+	cos		$tmp145 $tmp146 	%argrw{"wr"}
+	mul		___320_derivation $tmp144 $tmp145 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:66
+#  
+	neq		$tmp147 ___320_derivation $const5 	%line{66} %argrw{"wrr"}
+	if		$tmp147 215 215 	%argrw{"r"}
+	fabs		$tmp149 ___320_derivation 	%argrw{"wr"}
+	log		$tmp148 $tmp149 	%argrw{"wr"}
+	add		___320_index ___320_index $tmp148 	%argrw{"wrr"}
+	assign		$tmp150 ___320_iter 	%argrw{"wr"}
+	add		___320_iter ___320_iter $const3 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:68
+#  	index = index*nabla_main + index_pre*(1.0-nabla_main);
+	neq		$tmp151 ___320_iter $const2 	%line{68} %argrw{"wrr"}
+	if		$tmp151 219 220 	%argrw{"r"}
+	assign		$tmp152 ___320_iter 	%argrw{"wr"}
+	div		___320_index ___320_index $tmp152 	%argrw{"wrr"}
+	assign		___320_index $const5 	%argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:69
+#  }
+	mul		$tmp153 ___320_index ___320_nabla_main 	%line{69} %argrw{"wrr"}
+	sub		$tmp154 $const6 ___320_nabla_main 	%argrw{"wrr"}
+	mul		$tmp155 ___330_index_pre $tmp154 	%argrw{"wrr"}
+	add		___320_index $tmp153 $tmp155 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:72
+#  }
+	assign		index ___320_index 	%line{72} %argrw{"wr"}
+	return
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:95
+#  	index *= Pos_Scale;
+	gt		$tmp156 index $const5 	%line{95} %argrw{"wrr"}
+	neq		$tmp157 $tmp156 $const2 	%argrw{"wrr"}
+	if		$tmp157 232 232 	%argrw{"r"}
+	neq		$tmp158 Render_Type $const2 	%argrw{"wrr"}
+	neq		$tmp159 $tmp158 $const2 	%argrw{"wrr"}
+	assign		$tmp157 $tmp159 	%argrw{"wr"}
+	if		$tmp157 240 255 	%argrw{"r"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:96
+#  	if(index > 1.0) { index = 1.0; }
+	mul		index index Pos_Scale 	%line{96} %argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:97
+#  	Color = (Pos_Color - Mid_Color) * index + Mid_Color;
+	gt		$tmp160 index $const6 	%line{97} %argrw{"wrr"}
+	if		$tmp160 237 237 	%argrw{"r"}
+	assign		index $const6 	%argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:98
+#  }
+	sub		$tmp161 Pos_Color Mid_Color 	%line{98} %argrw{"wrr"}
+	mul		$tmp162 $tmp161 index 	%argrw{"wrr"}
+	add		Color $tmp162 Mid_Color 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:100
+#  	index *= Neg_Scale;
+	lt		$tmp163 index $const5 	%line{100} %argrw{"wrr"}
+	neq		$tmp164 $tmp163 $const2 	%argrw{"wrr"}
+	if		$tmp164 246 246 	%argrw{"r"}
+	neq		$tmp165 Render_Type $const3 	%argrw{"wrr"}
+	neq		$tmp166 $tmp165 $const2 	%argrw{"wrr"}
+	assign		$tmp164 $tmp166 	%argrw{"wr"}
+	if		$tmp164 254 255 	%argrw{"r"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:101
+#  	if (index < -1.0) { index = -1.0; }
+	mul		index index Neg_Scale 	%line{101} %argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:102
+#  	Color = (Mid_Color - Neg_Color) * index + Mid_Color;
+	lt		$tmp167 index $const8 	%line{102} %argrw{"wrr"}
+	if		$tmp167 251 251 	%argrw{"r"}
+	assign		index $const8 	%argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:103
+#  }
+	sub		$tmp168 Mid_Color Neg_Color 	%line{103} %argrw{"wrr"}
+	mul		$tmp169 $tmp168 index 	%argrw{"wrr"}
+	add		Color $tmp169 Mid_Color 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:106
+#  }
+	assign		Color Mid_Color 	%line{106} %argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:110
+#  	index = 0.5 + index * 0.5;
+	eq		$tmp170 Fac_Type $const2 	%line{110} %argrw{"wrr"}
+	if		$tmp170 259 271 	%argrw{"r"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:111
+#  }
+	mul		$tmp171 index $const9 	%line{111} %argrw{"wrr"}
+	add		index $const9 $tmp171 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:113
+#  	index = fabs(index);
+	eq		$tmp172 Fac_Type $const3 	%line{113} %argrw{"wrr"}
+	if		$tmp172 262 271 	%argrw{"r"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:114
+#  }
+	fabs		index index 	%line{114} %argrw{"wr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:116
+#  	index = (Color[0]+Color[1]+Color[2]) * (1.0/3.0);
+	eq		$tmp173 Fac_Type $const4 	%line{116} %argrw{"wrr"}
+	if		$tmp173 271 271 	%argrw{"r"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:117
+#  }
+	compref		$tmp174 Color $const2 	%line{117} %argrw{"wrr"}
+	compref		$tmp175 Color $const3 	%argrw{"wrr"}
+	add		$tmp176 $tmp174 $tmp175 	%argrw{"wrr"}
+	compref		$tmp177 Color $const4 	%argrw{"wrr"}
+	add		$tmp178 $tmp176 $tmp177 	%argrw{"wrr"}
+	div		$tmp179 $const6 $const10 	%argrw{"wrr"}
+	mul		index $tmp178 $tmp179 	%argrw{"wrr"}
+# C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\Lyapunov.osl:120
+#  }
+	assign		Fac index 	%line{120} %argrw{"wr"}
+	end

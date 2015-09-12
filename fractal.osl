@@ -1,0 +1,38 @@
+#include <stdosl.h>
+ 
+shader node_fractal(
+    float CenterX = 0.0,
+    float CenterY = 0.0,
+    point Vector = P,
+    float Zoom = 1.0,
+    int MaxIterations = 50,
+    color Foreground = color(1.0),
+    color Background = color(0.0),
+    output float Fac = 0.0,
+    output color Color = 0.0)
+{
+    point p = Vector / (2* Zoom);
+    float auxiliar = 0.0;
+         
+    p[0] += CenterX;    
+    p[1] += CenterY;    
+     
+    point pa = p;
+    point pb = point(0.0);
+    int i = 0;
+    for(i=1; i<MaxIterations; i++)
+    {
+        pb[0] = pa[0]*pa[0] - pa[1]*pa[1];
+        pb[1] = pa[0]*pa[1] + pa[1]*pa[0];
+        pa = pb + p;
+    }
+     
+    auxiliar = sqrt((pa[0]*pa[0]) + (pa[1]*pa[1]));
+ 
+    Fac = clamp(auxiliar,0.0,1.0);
+ 
+    if (Fac == 0.0)
+        Color = Background;
+    else
+        Color = mix(Foreground, Background, Fac);       
+}

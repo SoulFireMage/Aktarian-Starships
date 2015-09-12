@@ -1,0 +1,46 @@
+#include "stdosl.h"
+
+shader node_mandelbrot_interior(
+float CenterX = 0.0,
+float CenterY = 0.0,
+point Vector = P,
+float Zoom = 1.0,
+int Iterations = 50,
+color Foreground = color(1.0),
+color Background = color(0.0),
+output float Fac = 0.0,
+output color Color = 0.0, 
+float clampA = 1.0,
+float clampB = 0.0
+)
+{
+// Scale position
+point p = Vector / (2* Zoom);
+float auxiliar = 0.0;
+float factor = 0.0;
+
+// Move center of the image
+p[0] += CenterX; 
+p[1] += CenterY; 
+
+point pa = p;
+point pb = point(0.0);
+int i = 0;
+for(i=1; i < 100; i++)
+{
+pb[0] =  pa[0]*pa[0] - pa[1]*pa[1] - pa[2]* pow(pa[2], pa[2]) * cos((pa[0]*pa[0])* pb[0]);
+pb[1] =  pa[0]*pa[1] + pa[1]*pa[0] + pa[2] * pa[1] / cos((pa[1]*pa[1])* pb[1]);
+pa = pb + p;
+}
+
+auxiliar = pow((pa[0]*pa[0]) + (pa[1]*pa[1]),pa[1]);
+
+// Colorize
+Fac = clamp(auxiliar,clampA,clampB);
+
+// Return variables
+if (Fac == 0.0)
+Color = Background;
+else
+Color = mix(Foreground, Background, Fac); 
+}
