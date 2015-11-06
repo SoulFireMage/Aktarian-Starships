@@ -1,0 +1,19 @@
+insert into machines (1, 1)
+
+
+insert into servicestatus values (1, "Operational")
+
+
+insert into Faultcodes values (0 , "Default")
+
+insert into Locations values (1)
+
+insert into machine_asset_History values (1,1,"10/10/2015", "11/11/2015")
+
+insert into machine_telemetry values (1,"10/10/2015 12:15", 25, 80, 1,1)
+
+insert into resultcodes values (1,"Valid")
+
+insert into invalidScans values (1001,103040234,1,"10/10/2015",1)
+
+insert into packetserialnumbers values ("S4G342S54")

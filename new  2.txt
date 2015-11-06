@@ -1,0 +1,4 @@
+ raspivend-db1.cz7ruixvcdfu.eu-west-1.rds.amazonaws.com
+     raspivend.cz7ruixvcdfu.eu-west-1.rds.amazonaws.com
+	 
+	 active_material_index
