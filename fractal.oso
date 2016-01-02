@@ -139,9 +139,9 @@ code ___main___
 # C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\fractal.osl:33
 #  
 	functioncall	$const10 48 	%line{33} %argrw{"r"}
-# C:/Program Files\\Blender Foundation\\Blender\\2.75\\scripts\\addons\\cycles\\shader\\stdosl.h:144
+# C:/Program Files\\Blender Foundation\\Blender\\2.76\\scripts\\addons\\cycles\\shader\\stdosl.h:144
 # PERCOMP1 (sqrt)
-	min		$tmp29 auxiliar $const9 	%filename{"C:/Program Files\\Blender Foundation\\Blender\\2.75\\scripts\\addons\\cycles\\shader\\stdosl.h"} %line{144} %argrw{"wrr"}
+	min		$tmp29 auxiliar $const9 	%filename{"C:/Program Files\\Blender Foundation\\Blender\\2.76\\scripts\\addons\\cycles\\shader\\stdosl.h"} %line{144} %argrw{"wrr"}
 	max		Fac $tmp29 $const5 	%argrw{"wrr"}
 # C:\\Dropbox\\Camera Uploads\\Katiya and My-elia\\SourceControlled\\Katiya_TheAktarianStarShip\\fractal.osl:35
 #         Color = Background;
